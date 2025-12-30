@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from app.llm import generate_response
 from app.ingest import ingest_project
+from app.rag import ask_rag
 
 app = FastAPI()
 
@@ -16,8 +17,6 @@ async def chat(input: dict):
     return {"answer": answer}
 
 
-
-
 @app.post("/ingest")
 async def ingest(data: dict):
     folder = data.get("folder")
@@ -25,19 +24,9 @@ async def ingest(data: dict):
     return {"status": "ok", "folder": folder}
 
 
-
-from app.rag import ask_rag
-
-# @app.post("/ask")
-# async def ask(data: dict):
-#     question = data.get("question")
-#     response = await ask_rag(question)
-#     return response
-
-from app.rag import ask_rag
-
 @app.post("/ask")
 async def ask(data: dict):
+    print('POST: ask')
     question = data.get("question")
     response = await ask_rag(question)
     return response
